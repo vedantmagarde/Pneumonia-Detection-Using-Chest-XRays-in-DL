@@ -1,0 +1,148 @@
+30 best impactful experiments
+
+I am giving these in a progression order, so you can say:
+“we started from controlled CNN upgrades, then moved to transfer learning, then fine-tuning, then ensemble.”
+
+Group 1 — stabilize your current baseline first
+
+E1
+P1 → I1 → A1 → M1 → T1
+Normalization only → 150×150 Gray → None → Baseline CNN → Default Train
+
+E2
+P1 → I1 → A2 → M1 → T1
+Normalization only → 150×150 Gray → Light → Baseline CNN → Default Train
+
+E3
+P1 → I1 → A3 → M1 → T1
+Normalization only → 150×150 Gray → Medium → Baseline CNN → Default Train
+
+E4
+P1 → I1 → A2 → M2 → T1
+Normalization only → 150×150 Gray → Light → Improved CNN → Default Train
+
+E5
+P1 → I1 → A3 → M2 → T2
+Normalization only → 150×150 Gray → Medium → Improved CNN → Class Weights
+
+E6
+P2 → I1 → A2 → M2 → T2
+CLAHE → 150×150 Gray → Light → Improved CNN → Class Weights
+
+E7
+P4 → I1 → A2 → M2 → T2
+CLAHE + Contrast → 150×150 Gray → Light → Improved CNN → Class Weights
+
+E8
+P4 → I2 → A2 → M2 → T2
+CLAHE + Contrast → 224×224 Gray → Light → Improved CNN → Class Weights
+
+Why these first: they tell you whether the gain is coming from better preprocessing + better CNN + better training, before jumping to transfer learning.
+
+Group 2 — transfer learning at 224×224
+
+Pretrained models usually prefer 224×224, and for ImageNet backbones you should test both grayscale-repeated-3-channel and proper 3-channel input. The imbalanced-dataset paper also supports transfer learning plus balancing strategies.
+
+E9
+P1 → I3 → A2 → M3 → T3
+Normalization only → 224×224 3-channel → Light → MobileNetV2 → Fine-tune Head
+
+E10
+P2 → I3 → A2 → M3 → T3
+CLAHE → 224×224 3-channel → Light → MobileNetV2 → Fine-tune Head
+
+E11
+P4 → I3 → A2 → M3 → T4
+CLAHE + Contrast → 224×224 3-channel → Light → MobileNetV2 → Partial Unfreeze
+
+E12
+P1 → I3 → A2 → M4 → T3
+Normalization only → 224×224 3-channel → Light → EfficientNetB0 → Fine-tune Head
+
+E13
+P2 → I3 → A2 → M4 → T3
+CLAHE → 224×224 3-channel → Light → EfficientNetB0 → Fine-tune Head
+
+E14
+P4 → I3 → A2 → M4 → T4
+CLAHE + Contrast → 224×224 3-channel → Light → EfficientNetB0 → Partial Unfreeze
+
+E15
+P1 → I3 → A2 → M5 → T3
+Normalization only → 224×224 3-channel → Light → DenseNet121 → Fine-tune Head
+
+E16
+P2 → I3 → A2 → M5 → T3
+CLAHE → 224×224 3-channel → Light → DenseNet121 → Fine-tune Head
+
+E17
+P4 → I3 → A2 → M5 → T4
+CLAHE + Contrast → 224×224 3-channel → Light → DenseNet121 → Partial Unfreeze
+
+E18
+P1 → I3 → A2 → M6 → T3
+Normalization only → 224×224 3-channel → Light → ResNet50 → Fine-tune Head
+
+E19
+P2 → I3 → A2 → M6 → T3
+CLAHE → 224×224 3-channel → Light → ResNet50 → Fine-tune Head
+
+E20
+P4 → I3 → A2 → M6 → T4
+CLAHE + Contrast → 224×224 3-channel → Light → ResNet50 → Partial Unfreeze
+
+E21
+P1 → I3 → A2 → M7 → T3
+Normalization only → 224×224 3-channel → Light → Xception → Fine-tune Head
+
+E22
+P2 → I3 → A2 → M7 → T3
+CLAHE → 224×224 3-channel → Light → Xception → Fine-tune Head
+
+E23
+P4 → I3 → A2 → M7 → T4
+CLAHE + Contrast → 224×224 3-channel → Light → Xception → Partial Unfreeze
+
+Group 3 — stronger regularization + imbalance handling
+
+E24
+P4 → I3 → A3 → M4 → T4
+CLAHE + Contrast → 224×224 3-channel → Medium → EfficientNetB0 → Partial Unfreeze
+
+E25
+P4 → I3 → A3 → M5 → T4
+CLAHE + Contrast → 224×224 3-channel → Medium → DenseNet121 → Partial Unfreeze
+
+E26
+P4 → I3 → A3 → M6 → T4
+CLAHE + Contrast → 224×224 3-channel → Medium → ResNet50 → Partial Unfreeze
+
+    E27
+    P4 → I3 → A3 → M7 → T4
+    CLAHE + Contrast → 224×224 3-channel → Medium → Xception → Partial Unfreeze
+
+E28
+P4 → I3 → A3 → M5 → T5
+CLAHE + Contrast → 224×224 3-channel → Medium → DenseNet121 → Focal Loss
+
+E29
+P4 → I3 → A3 → M6 → T5
+CLAHE + Contrast → 224×224 3-channel → Medium → ResNet50 → Focal Loss
+
+These are the ones most likely to push you upward when class imbalance and hard pneumonia samples are the bottleneck. That matches the imbalanced-dataset paper’s direction toward class balancing, augmentation, and transfer learning.
+
+Group 4 — final candidate
+
+E30
+Top 3 from E24–E29 → M8
+Ensemble / Final
+Example:
+
+DenseNet121 best
+ResNet50 best
+EfficientNetB0 best
+then soft-voting / average probabilities
+
+A recent pneumonia paper explicitly notes that future gains can come from ensemble learning, especially after strong single-model baselines.
+
+

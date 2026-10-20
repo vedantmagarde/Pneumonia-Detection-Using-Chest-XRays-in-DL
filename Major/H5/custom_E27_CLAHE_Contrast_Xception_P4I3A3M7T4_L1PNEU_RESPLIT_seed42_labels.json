@@ -1,0 +1,15 @@
+{
+  "label_map": {
+    "NORMAL": 0,
+    "PNEUMONIA": 1
+  },
+  "class_names": [
+    "NORMAL",
+    "PNEUMONIA"
+  ],
+  "positive_class": "PNEUMONIA",
+  "output": "sigmoid = P(PNEUMONIA)",
+  "decision_threshold": 0.5165756940841675,
+  "input_scaling": "x/127.5 - 1 (Xception)",
+  "protocol": "patient_resplit"
+}

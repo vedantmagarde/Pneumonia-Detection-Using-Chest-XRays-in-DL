@@ -1,24 +1,40 @@
-﻿ChestXRay2017/
-H5/
-tmp/
-.ipynb_checkpoints/
+﻿# Data and large models (back up separately)
+ChestXRay2017/
 *.h5
 *.keras
+tmp/
+
+# Minor project models: ignore completely
+Minor/H5/
+
+# Major H5: ignore models, keep only prediction files and label sidecars
+Major/H5/**
+!Major/H5/**/
+!Major/H5/*.npz
+!Major/H5/*.json
+!Major/H5/ensemble_preds/*.npz
+!Major/H5/ensemble_preds/*.json
+
+
+Major/backup 42 seed/
+
+
+# Personal / local files
 _prior_prpt.txt
 open_minor_project_gpu.txt
 perimeter.txt
-Variations.txt
-Roadmap.md
 
-scratch_gen_notebook.py
-patch_memory_error.py
-patch_memory_v2.py
-patch_paths.py
-patch_optimizer.py
+# Helper scripts
+scratch_*.py
+patch_*.py
 
-patch_predict.py
-
-patch_save.py
-scratch_gen_custom_e27.py
-scratch_inspect.py
-patch_advanced_ssl.py
+# Python / Jupyter / OS clutter
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+.env
+.vscode/
+*.log
+Thumbs.db
+desktop.ini
+.DS_Store
